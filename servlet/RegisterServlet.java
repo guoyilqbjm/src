@@ -57,7 +57,7 @@ public class RegisterServlet extends HttpServlet {
 				session.setMaxInactiveInterval(900);
 				session.setAttribute("username", username);
 				session.setAttribute("password", password);
-				response.sendRedirect("BaseInformation.jsp");
+				response.sendRedirect("managetasks.jsp");
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
