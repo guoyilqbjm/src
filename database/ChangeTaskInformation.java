@@ -21,9 +21,5 @@ public class ChangeTaskInformation {
 			e.printStackTrace();
 		}
 	}
-	public static void main(String argsp[]) throws ClassNotFoundException, SQLException{
-		DataBaseInfo.init();
-		ChangeTaskInformation.change("guoyi", "±ÍÃ‚“ª", "1,2013-12-12 12:12:12", "2,2268323136@qq.com,lll,sdfd");
-		DataBaseInfo.exit();
-	}
+
 }
