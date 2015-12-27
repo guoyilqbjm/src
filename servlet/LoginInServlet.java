@@ -59,7 +59,7 @@ public class LoginInServlet extends HttpServlet {
         try {
 			if(LoginIn.loginIn(username, password)){
 				session.setAttribute("username", username);
-				response.sendRedirect("managetasks.jsp");
+				response.sendRedirect("newtask.jsp");
 			}
 			else{
 				response.sendRedirect("LoginInError.jsp");
