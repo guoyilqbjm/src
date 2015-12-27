@@ -48,13 +48,13 @@ public class RegisterServlet extends HttpServlet {
 		}
 		String username = request.getParameter("usernamesignup"), password = request.getParameter("passwordsignup");
 		try {
-			if(UserExisted.is(username)){
+			if(username.equals("admin") || UserExisted.is(username)){
 				response.sendRedirect("LoginInError.jsp");
 			}
 			else{
 				Register.register(username, password);
 				HttpSession session = request.getSession();
-				session.setMaxInactiveInterval(900);
+				session.setMaxInactiveInterval(600);
 				session.setAttribute("username", username);
 				session.setAttribute("password", password);
 				response.sendRedirect("managetasks.jsp");

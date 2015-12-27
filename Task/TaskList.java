@@ -82,6 +82,7 @@ public class TaskList {
 	public static boolean startTask(String info[]){
 		
 		assert(info.length == 4);
+		
 		String username = info[0],title=info[1],thisMode=info[2],thatMode=info[3];
 		
 		Task task = null;
