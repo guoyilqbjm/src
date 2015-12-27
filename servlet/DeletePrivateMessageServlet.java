@@ -1,8 +1,6 @@
 package servlet;
 
 import java.io.IOException;
-import java.sql.ResultSet;
-
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -10,21 +8,19 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import Task.TaskList;
-import database.GetTaskInfo;
-import error.ErrorInformation;
+import database.DeleteMessage;
 
 /**
- * Servlet implementation class StartTaskServlet
+ * Servlet implementation class DeletePrivateMessageServlet
  */
-@WebServlet("/StartTaskServlet")
-public class StartTaskServlet extends HttpServlet {
+@WebServlet("/DeletePrivateMessageServlet")
+public class DeletePrivateMessageServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public StartTaskServlet() {
+    public DeletePrivateMessageServlet() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -34,23 +30,17 @@ public class StartTaskServlet extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		//response.getWriter().append("Served at: ").append(request.getContextPath());
 		HttpSession session = request.getSession();
 		String username = (String) session.getAttribute("username");
-		if(username == null){
-			ErrorInformation.set("ÄúÉÐÎ´µÇÂ½£¡");
+		if(username==null){
 			response.sendRedirect("LoginInError.jsp");
-			return;
 		}
-		
-		String title = request.getParameter("title");
-		String mode[] = GetTaskInfo.get(username, title);
-		TaskList.startTask(mode);
-		response.sendRedirect("managetasks.jsp");
-		
-		/*
-		 * to-do:response´¦Àí
-		 * */
+		else{
+			
+			String time=request.getParameter("deleteTime");
+			DeleteMessage.delete(time);
+			response.sendRedirect("checkmessage.jsp");
+		}
 	}
 
 	/**

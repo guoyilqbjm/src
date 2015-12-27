@@ -19,7 +19,6 @@ public class GetTaskInfo {
 			}
 			else{
 				ErrorInformation.set("找不到该任务！");
-				System.out.println("找不到该任务！");
 				return null;
 			}
 		} catch (SQLException e) {
