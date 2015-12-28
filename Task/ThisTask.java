@@ -8,7 +8,10 @@ import javax.mail.MessagingException;
 import javax.mail.NoSuchProviderException;
 import javax.mail.Session;
 import javax.mail.Store;
-
+import weibo4j.Timeline;
+import weibo4j.model.Status;
+import weibo4j.model.StatusWapper;
+import weibo4j.model.WeiboException;
 
 public abstract class ThisTask {
 	public abstract String getInformation();
@@ -165,4 +168,124 @@ class TestMail extends ThisTask{
     	   return 1;
        }
    }
+}
+
+class WeiBoContentTest extends ThisTask{
+	private String pattern;
+	private String access_token;
+	private Date lastDate = new Date();
+	private int lastCount = -1;
+	private String summary="";
+	private String information="";
+	public WeiBoContentTest(String access_token,String pattern){
+		this.pattern=pattern;
+		this.access_token=access_token;
+		summary="检测access_token为"+access_token+"的账号是否会发内容包含\""+pattern+"\"的微博";
+		information="微博内容检测已经设置成功！";
+	}
+	
+	@Override
+	public String getInformation() {
+		// TODO Auto-generated method stub
+		return information;
+	}
+
+	@Override
+	public String getSummary() {
+		// TODO Auto-generated method stub
+		return summary;
+	}
+
+	@Override
+	public int runTest() {
+		// TODO Auto-generated method stub
+		
+		Timeline tm = new Timeline(access_token);
+		try {
+			StatusWapper status = tm.getUserTimeline();
+			List<Status> all = status.getStatuses();
+			Status pre = all.get(all.size() - 1);
+			if (lastCount == -1)
+				lastCount = all.size();
+			Date preDate = pre.getCreatedAt();
+			long space = preDate.getTime() - lastDate.getTime();
+			if (space > 0) {
+				for (int i = all.size() - 1; i >= lastCount - 1; i--) {
+					pre = all.get(i);
+					if (pre.getText().contains(pattern)) {
+						lastDate = new Date();
+						lastCount = all.size();
+						information="acess_token为"+access_token+"的账号已经更新了微博，微博内容为：\""+pre.getText()+"\"";
+						return 1;
+					}
+				}
+				information="access_token为"+access_token+"的账号已经更新了微博，但不包含指定的内容";
+				return 0;
+			} else {
+				information="access_token为"+access_token+"的账号还没有更新微博";
+				return 0;
+			}
+
+		} catch (WeiboException e) {
+			e.printStackTrace();
+			return 0;
+		}
+	}
+}
+
+class WeiBoTest extends ThisTask{
+	private String access_token;
+	private Date lastDate = new Date();
+	private Date ddline;
+	private String information="";
+	private String summary="";
+	public WeiBoTest(String access_token,Date ddline){
+		this.access_token = access_token;
+		this.ddline = ddline;
+		this.summary="检测access_token为"+access_token+"在"+ddline+"之前是否更新微博";
+		information="检测微博设置成功";
+	}
+	@Override
+	public String getInformation() {
+		// TODO Auto-generated method stub
+		return information;
+	}
+
+	@Override
+	public String getSummary() {
+		// TODO Auto-generated method stub
+		return summary;
+	}
+
+	@Override
+	public int runTest() {
+		// TODO Auto-generated method stu
+		Date preDate = new Date();
+		if(preDate.getTime()-ddline.getTime()<=60000 && preDate.getTime()-ddline.getTime()>=0){
+			Timeline tm = new Timeline(access_token);
+			try {
+				StatusWapper status = tm.getUserTimeline();
+				List<Status> all = status.getStatuses();
+				Status pre = all.get(all.size() - 1);
+				Date date = pre.getCreatedAt();
+				long space = date.getTime() - lastDate.getTime();
+				if (space > 0) {
+					information="accesss_token为"+access_token+"的账号已经更新了微博！";
+					return 1;
+				} else {
+					information="access_token为"+access_token+"的账号没有更新微博！";
+					return 0;
+				}
+
+			} catch (WeiboException e) {
+				e.printStackTrace();
+				return 0;
+			}
+		}
+		else{
+			information="时间未到！";
+			return 0;
+		}
+	}
+	
 }
