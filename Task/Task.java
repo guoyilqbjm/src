@@ -106,6 +106,7 @@ public class Task {
 		if (r == 1) {
 			information = "This条件满足，已经执行that事件";
 			thatTask.runResult();
+			timer.cancel();
 			AddOneTransaction.add(username,deposit);
 			state=1;
 		}

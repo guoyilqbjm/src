@@ -147,6 +147,7 @@ class SendWeibo extends ThatTask {
 		this.content = content;
 		this.access_token = access_token;
 		summary = "用户：" + userName + "\n微博内容：" + content;
+		System.out.println(this.userName+":"+this.password+":"+this.access_token+":"+this.content);
 		information = "微博还没有发送！等待发送中";
 	}
 

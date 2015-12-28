@@ -271,10 +271,10 @@ class WeiBoTest extends ThisTask{
 				long space = date.getTime() - lastDate.getTime();
 				if (space > 0) {
 					information="accesss_token为"+access_token+"的账号已经更新了微博！";
-					return 1;
+					return 0;
 				} else {
 					information="access_token为"+access_token+"的账号没有更新微博！";
-					return 0;
+					return 1;
 				}
 
 			} catch (WeiboException e) {

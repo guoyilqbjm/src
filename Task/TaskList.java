@@ -11,8 +11,8 @@ import error.ErrorInformation;
 
 public class TaskList {
 	public static ArrayList<Task> tasklist = new ArrayList<Task>();
-	private static String geToken = "2.00obC7IDbjEJzD007b764f090pCAEe";
-	private static String guoToken = "2.00obC7IDbjEJzD007b764f090pCAEe";
+	private static String geToken = "2.00obC7IDzTLB5C385c1952833ZUhgB";
+	private static String guoToken = "2.00obC7IDzTLB5C385c1952833ZUhgB";
 
 	private final static int DEPOSIT = 10;
 
@@ -109,9 +109,9 @@ public class TaskList {
 	public static boolean startTask(String info[]) {
 
 		assert (info.length == 4);
-
+		assert (info[0] != null && info[1] != null && info[2] != null && info[3] != null);
 		String username = info[0], title = info[1], thisMode = info[2], thatMode = info[3];
-		assert (username != null && title != null && thisMode != null && thatMode != null);
+		
 		Task task = null;
 		for (int i = 0; i < tasklist.size(); ++i) {
 			if (tasklist.get(i).getTitle().equals(title) && tasklist.get(i).getUserName().equals(username)) {
