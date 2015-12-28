@@ -68,7 +68,8 @@ public class TaskList {
 
 		String userinfo = GetUserInformation.get(username);
 		String infors[] = userinfo.split(",");
-		int level = Integer.getInteger(infors[3]);
+		assert(infors.length==4);
+		int level = Integer.parseInt(infors[3]);
 		int deposit = DEPOSIT - level;
 		if (Integer.parseInt((GetUserInformation.get(username).split(","))[1]) < deposit) {
 			ErrorInformation.set("用户余额不足，无法开始任务！");
