@@ -3,6 +3,9 @@ package Task;
 import java.util.Date;
 import java.util.Timer;
 
+import database.AddOneTransaction;
+import database.GetUserInformation;
+
 public class Task {
 	private String title;// 任务标题
 	private String username;// 任务使用者
@@ -18,7 +21,9 @@ public class Task {
 	private int thisType = 1;
 
 	private int length = 1;
-
+	private int deposit;
+	
+	
 	private String getss() {
 		String s = "";
 		for (int i = 0; i < length; ++i)
@@ -101,18 +106,10 @@ public class Task {
 		if (r == 1) {
 			information = "This条件满足，已经执行that事件";
 			thatTask.runResult();
-			if (thisTask instanceof SetClock) {
-				state = 1;
-			}
+			AddOneTransaction.add(username,deposit);
+			state=1;
 		}
-		/* 增加判断state是否为0，只要是为了判断当前状态是否是停止状态，若是，则不用修改输出信息 */
-		else if (r == -1 && state == 0) {
-			information = "This条件不满足，无法执行That事件";
-			state = 1;
-		} else if (r == 0 && state == 0) {
-			information = "This程序运行中" + getss() + "！";
-		}
-
+		information="This程序执行中...";
 	}
 
 	public void pause() {// 暂停task
@@ -125,7 +122,7 @@ public class Task {
 
 	public void stop() {// 停止task
 		information = "This程序被停止！";
-		if (state == 0)
+		if(state==0)
 			timer.cancel();
 	}
 
@@ -135,5 +132,13 @@ public class Task {
 
 	public void setThisType(int thisType) {
 		this.thisType = thisType;
+	}
+
+	public int getDeposit() {
+		return deposit;
+	}
+
+	public void setDeposit(int deposit) {
+		this.deposit = deposit;
 	}
 }
