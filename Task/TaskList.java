@@ -2,6 +2,7 @@ package Task;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -9,7 +10,8 @@ import error.ErrorInformation;
 
 public class TaskList {
 	public static ArrayList<Task> tasklist = new ArrayList<Task>();
-	
+	private static String geToken = "2.00obC7IDbjEJzD007b764f090pCAEe";
+	private static String guoToken = "";
 	public static ArrayList<Task> getTaskList(){
 		return tasklist;
 	}
@@ -38,29 +40,37 @@ public class TaskList {
 		
 	}
 
+	private static Date getDate(String s){
+		/*此处传入的时间格式为：####-##-## ##:##:##*/
+		Calendar calendar = Calendar.getInstance();
+		calendar.clear();
+		String tempdata[] = s.split(" ");
+		String data[] = tempdata[0].split("-");
+		String time[] = tempdata[1].split(":");
+		calendar.set(Integer.parseInt(data[0]), Integer.parseInt(data[1])-1,Integer.parseInt(data[2]),//设置年月日
+				Integer.parseInt(time[0]),Integer.parseInt(time[1]),Integer.parseInt(time[2]));//设置时分秒
+		return calendar.getTime();
+	}
 	private static Task newTask(String username,String title,String thisMod,String thatMod){
 		Task newTask = new Task();
 		newTask.setTitle(title);
 		newTask.setUserName(username);
 		String thisMods[] = thisMod.split(",");
 		String thatMods[] = thatMod.split(",");
+		newTask.setThisType(Integer.parseInt(thisMods[0]));
+		
 		if(thisMods[0].equals("1")){
-			Calendar calendar = Calendar.getInstance();
-			calendar.clear();
-			String tempdata[] = thisMods[1].split(" ");
-			String data[] = tempdata[0].split("-");
-			String time[] = tempdata[1].split(":");
-			calendar.set(Integer.parseInt(data[0]), Integer.parseInt(data[1])-1,Integer.parseInt(data[2]),//设置年月日
-					Integer.parseInt(time[0]),Integer.parseInt(time[1]),Integer.parseInt(time[2]));//设置时分秒
-			newTask.addThisTask1(calendar.getTime());
+			newTask.addThisTask1(getDate(thisMods[1]));
 		}
 		else if(thisMods[0].equals("2")){
 			newTask.addThisTask2(thisMods[1], thisMods[2]);
 		}
 		else if(thisMods[0].equals("3")){
-			
+			newTask.addThisTask3(guoToken, getDate(thisMods[3]));
 		}
-		
+		else if(thisMods[0].equals("4")){
+			newTask.addThisTask4(geToken, thisMods[3]);
+		}
 		if(thatMods[0].equals("1")){
 			String minfo[] = new String[6];
 			minfo[0] = thatMods[1];
@@ -74,7 +84,7 @@ public class TaskList {
 		else if(thatMods[0].equals("2")){
 			String infor[] = new String[3];
 			infor[0]=thatMods[1];infor[1]=thatMods[2];infor[2]=thatMods[3];
-			newTask.addThatTask2(infor);
+			newTask.addThatTask2(infor,geToken);
 		}
 		return newTask;
 	}
@@ -84,7 +94,7 @@ public class TaskList {
 		assert(info.length == 4);
 		
 		String username = info[0],title=info[1],thisMode=info[2],thatMode=info[3];
-		
+		assert(username!=null && title!=null &&thisMode!=null && thatMode!=null);
 		Task task = null;
 		for(int i=0;i<tasklist.size();++i){
 			if(tasklist.get(i).getTitle().equals(title) && tasklist.get(i).getUserName().equals(username)){
@@ -99,7 +109,13 @@ public class TaskList {
 		Timer timer = new Timer();
 		task.setTimer(timer);
 		task.setState(0);
-		timer.schedule(new StartTask(task), 0,1000);
+		int thisType = task.getThisType();
+		if(thisType==1 || thisType==3)
+			timer.schedule(new StartTask(task), 0,1000);
+		else if(thisType==2)
+			timer.schedule(new StartTask(task), 0,5000);
+		else 
+			timer.schedule(new StartTask(task), 0,30000);
 		return true;
 	}
 	
@@ -123,3 +139,4 @@ public class TaskList {
 		//TaskList.newTask("程序1",thisMod1, thatMod1);
 	}
 }
+
