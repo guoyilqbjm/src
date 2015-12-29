@@ -45,7 +45,9 @@ public class AddOneTransaction {
 					level=4;
 				else
 					level=5;
-				sql="update user set score="+score+" && level="+level+" where username='"+username+"'";
+				sql="update user set score="+score+" where username='"+username+"'";
+				DataBaseInfo.statement.execute(sql);
+				sql="update user set level="+level+" where username='"+username+"'";
 				DataBaseInfo.statement.execute(sql);
 			}
 			

@@ -22,8 +22,7 @@ public class Task {
 
 	private int length = 1;
 	private int deposit;
-	
-	
+
 	private String getss() {
 		String s = "";
 		for (int i = 0; i < length; ++i)
@@ -106,25 +105,24 @@ public class Task {
 		if (r == 1) {
 			information = "This条件满足，已经执行that事件";
 			thatTask.runResult();
-			timer.cancel();
-			AddOneTransaction.add(username,deposit);
-			state=1;
+			AddOneTransaction.add(username, deposit);
+			state = 1;
+		} else if (r == -1) {
+			System.out.println("指定用户已经更新了微博");
+			state = 1;
 		}
-		information="This程序执行中...";
+		information = "This程序执行中...";
 	}
 
 	public void pause() {// 暂停task
-		if (state == 0) {
-			timer.cancel();
-			state = 1;
-			information = "This程序被暂停！";
-		}
+		timer.cancel();
+		state = 1;
+		information = "This程序被暂停！";
 	}
 
 	public void stop() {// 停止task
 		information = "This程序被停止！";
-		if(state==0)
-			timer.cancel();
+		timer.cancel();
 	}
 
 	public int getThisType() {

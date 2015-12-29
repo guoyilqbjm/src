@@ -205,15 +205,19 @@ class WeiBoContentTest extends ThisTask{
 			StatusWapper status = tm.getUserTimeline();
 			List<Status> all = status.getStatuses();
 			Status pre = all.get(all.size() - 1);
-			if (lastCount == -1)
+			if (lastCount == -1){
 				lastCount = all.size();
-			Date preDate = pre.getCreatedAt();
-			long space = preDate.getTime() - lastDate.getTime();
-			if (space > 0) {
+				return 0;
+			}
+			return 1;
+		/*	System.out.println("被检测内容："+pattern);
+			System.out.println("lastClastCount:"+lastCount);
+			System.out.println("preCount:"+all.size());
+			if (true) {
 				for (int i = all.size() - 1; i >= lastCount - 1; i--) {
 					pre = all.get(i);
+					System.out.println(pre.getText());
 					if (pre.getText().contains(pattern)) {
-						lastDate = new Date();
 						lastCount = all.size();
 						information="acess_token为"+access_token+"的账号已经更新了微博，微博内容为：\""+pre.getText()+"\"";
 						return 1;
@@ -221,10 +225,9 @@ class WeiBoContentTest extends ThisTask{
 				}
 				information="access_token为"+access_token+"的账号已经更新了微博，但不包含指定的内容";
 				return 0;
-			} else {
-				information="access_token为"+access_token+"的账号还没有更新微博";
-				return 0;
 			}
+			return 0;
+			*/
 
 		} catch (WeiboException e) {
 			e.printStackTrace();
@@ -261,17 +264,20 @@ class WeiBoTest extends ThisTask{
 	public int runTest() {
 		// TODO Auto-generated method stu
 		Date preDate = new Date();
+		System.out.println(preDate.getTime()-ddline.getTime());
 		if(preDate.getTime()-ddline.getTime()<=60000 && preDate.getTime()-ddline.getTime()>=0){
-			Timeline tm = new Timeline(access_token);
+			
+			/*Timeline tm = new Timeline(access_token);
 			try {
 				StatusWapper status = tm.getUserTimeline();
 				List<Status> all = status.getStatuses();
 				Status pre = all.get(all.size() - 1);
 				Date date = pre.getCreatedAt();
+				System.out.println(date);
 				long space = date.getTime() - lastDate.getTime();
 				if (space > 0) {
 					information="accesss_token为"+access_token+"的账号已经更新了微博！";
-					return 0;
+					return -1;
 				} else {
 					information="access_token为"+access_token+"的账号没有更新微博！";
 					return 1;
@@ -280,7 +286,8 @@ class WeiBoTest extends ThisTask{
 			} catch (WeiboException e) {
 				e.printStackTrace();
 				return 0;
-			}
+			}*/
+			return 1;
 		}
 		else{
 			information="时间未到！";
